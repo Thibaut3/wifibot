@@ -35,7 +35,6 @@ void MyRobot::doConnect() {
         return;
     }
     TimerEnvoi->start(75);
-
 }
 
 void MyRobot::disConnect() {
@@ -67,4 +66,105 @@ void MyRobot::MyTimerSlot() {
     while(Mutex.tryLock());
     socket->write(DataToSend);
     Mutex.unlock();
+}
+
+short MyRobot::Crc16(unsigned char *_Adresse_tab, unsigned char Taille_Max){
+    unsigned int Crc = 0xFFFF;
+    unsigned int Polynome = 0xA001;
+    unsigned int CptOctet = 0;
+    unsigned int CptBit = 0;
+    unsigned int Parity = 0;
+
+    Crc = 0xFFFF;
+    Polynome = 0xA001;
+    for (CptOctet=0; CptOctet<Taille_Max;CptOctet++){
+        Crc ^= *(_Adresse_tab + CptOctet);
+
+        for(CptBit=0;CptBit<=7;CptBit++){
+            Parity = Crc;
+            Crc >>=1;
+            if(Parity%2 == true) Crc ^= Polynome;
+        }
+    }
+    return (Crc);
+}
+
+
+void MyRobot::Avant(short speed1, short speed2){
+    DataToSend.resize(9);
+    DataToSend[0] = 0xFF;
+    DataToSend[1] = 0x07;
+    DataToSend[2] = (unsigned char) speed1;
+    DataToSend[3] = (unsigned char)(speed1 >> 8);
+    DataToSend[4] = (unsigned char) speed2;
+    DataToSend[5] = (unsigned char)(speed2 >> 8);
+    DataToSend[6] = (unsigned char)(80+1);
+    short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
+    DataToSend[7] = (unsigned char) mycrcsend;
+    DataToSend[8] = (unsigned char) (mycrcsend >> 8);
+
+    connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot()));
+}
+
+void MyRobot::Arriere(short speed1, short speed2){
+    DataToSend.resize(9);
+    DataToSend[0] = 0xFF;
+    DataToSend[1] = 0x07;
+    DataToSend[2] = (unsigned char) speed1;
+    DataToSend[3] = (unsigned char)(speed1 >> 8);
+    DataToSend[4] = (unsigned char) speed2;
+    DataToSend[5] = (unsigned char)(speed2 >> 8);
+    DataToSend[6] = (unsigned char)(0+1);
+    short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
+    DataToSend[7] = (unsigned char) mycrcsend;
+    DataToSend[8] = (unsigned char) (mycrcsend >> 8);
+
+    connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot()));
+}
+
+void MyRobot::Droite(short speed1, short speed2){
+    DataToSend.resize(9);
+    DataToSend[0] = 0xFF;
+    DataToSend[1] = 0x07;
+    DataToSend[2] = (unsigned char) speed1;
+    DataToSend[3] = (unsigned char)(speed1 >> 8);
+    DataToSend[4] = (unsigned char) speed2;
+    DataToSend[5] = (unsigned char)(speed2 >> 8);
+    DataToSend[6] = (unsigned char)(64+1);
+    short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
+    DataToSend[7] = (unsigned char) mycrcsend;
+    DataToSend[8] = (unsigned char) (mycrcsend >> 8);
+
+    connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot()));
+}
+
+void MyRobot::Gauche(short speed1, short speed2){
+    DataToSend.resize(9);
+    DataToSend[0] = 0xFF;
+    DataToSend[1] = 0x07;
+    DataToSend[2] = (unsigned char) speed1;
+    DataToSend[3] = (unsigned char)(speed1 >> 8);
+    DataToSend[4] = (unsigned char) speed2;
+    DataToSend[5] = (unsigned char)(speed2 >> 8);
+    DataToSend[6] = (unsigned char)(16+1);
+    short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
+    DataToSend[7] = (unsigned char) mycrcsend;
+    DataToSend[8] = (unsigned char) (mycrcsend >> 8);
+
+    connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot()));
+}
+
+void MyRobot::Stop(){
+    DataToSend.resize(9);
+    DataToSend[0] = 0xFF;
+    DataToSend[1] = 0x07;
+    DataToSend[2] = 0x00;
+    DataToSend[3] = 0x00;
+    DataToSend[4] = 0x00;
+    DataToSend[5] = 0x00;
+    DataToSend[6] = 0x00;
+    DataToSend[7] = 0x00;
+    DataToSend[8] = 0x00;
+
+    connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot()));
 }

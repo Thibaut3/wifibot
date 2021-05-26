@@ -17,7 +17,6 @@ public:
     QByteArray DataToSend;
     QByteArray DataReceived;
     QMutex Mutex;
-
 signals:
     void updateUI(const QByteArray Data);
 public slots:
@@ -27,6 +26,12 @@ public slots:
     void readyRead();
     void MyTimerSlot();
 
+    void Avant(short speed1, short speed2);
+    void Arriere(short speed1, short speed2);
+    void Gauche(short speed1, short speed2);
+    void Droite(short speed1, short speed2);
+    void Stop();
+    short Crc16(unsigned char *_Adresse_tab, unsigned char Taille_Max);
 private:
     QTcpSocket *socket;
     QTimer *TimerEnvoi;
