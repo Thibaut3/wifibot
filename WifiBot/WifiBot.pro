@@ -36,9 +36,20 @@ HEADERS += \
         myrobot.h
 
 FORMS += \
+        mainwindow.ui \
         mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    ../../../Bouton/Fleche bas.png \
+    ../../../Bouton/Fleche droite.png \
+    ../../../Bouton/Fleche gauche.png \
+    ../../../Bouton/Fleche haut.png \
+    ../../../Bouton/pngegg (1).png
+
+RESOURCES += \
+    image.qrc

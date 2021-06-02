@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Image/Fleche bas.png</file>
+        <file>Image/Fleche droite.png</file>
+        <file>Image/Fleche gauche.png</file>
+        <file>Image/Fleche haut.png</file>
+        <file>Image/pngegg.png</file>
+        <file>Image/stop.png</file>
+        <file>Image/voiture.png</file>
+    </qresource>
+</RCC>
