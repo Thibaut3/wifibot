@@ -2,6 +2,8 @@
 #include "myrobot.h"
 #include <QApplication>
 #include <windows.h>
+#include <QtWebEngine>
+
 
 int main(int argc, char *argv[])
 {

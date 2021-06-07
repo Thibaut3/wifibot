@@ -45,6 +45,18 @@ void MainWindow::on_boutonStop_clicked()
     myrobot.Stop();
 }
 
+void MainWindow::on_boutonPivotG_clicked()
+{
+    myrobot.PivoterG(ui->vitesse->value(),ui->vitesse->value());
+}
+
+void MainWindow::on_boutonPivotD_clicked()
+{
+    myrobot.PivoterD(ui->vitesse->value(),ui->vitesse->value());
+}
+
+
+
 void MainWindow::on_boutonConnexion_clicked()
 {
     myrobot.doConnect();
@@ -61,5 +73,7 @@ void MainWindow::on_IndicConnexion_textChanged()
 {
 
 }
+
+
 
 

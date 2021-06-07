@@ -7,5 +7,7 @@
         <file>Image/pngegg.png</file>
         <file>Image/stop.png</file>
         <file>Image/voiture.png</file>
+        <file>Image/PivotDroite.png</file>
+        <file>Image/PivotGauche.png</file>
     </qresource>
 </RCC>

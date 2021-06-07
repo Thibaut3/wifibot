@@ -30,6 +30,8 @@ public slots:
     void Arriere(short speed1, short speed2);
     void Gauche(short speed1, short speed2);
     void Droite(short speed1, short speed2);
+    void PivoterG(short speed1,short speed2);
+    void PivoterD(short speed1, short speed2);
     void Stop();
     short Crc16(unsigned char *_Adresse_tab, unsigned char Taille_Max);
 private:

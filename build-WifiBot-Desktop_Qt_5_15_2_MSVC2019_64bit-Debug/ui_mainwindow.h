@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.3
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -225,9 +225,9 @@ public:
         icon8.addFile(QString::fromUtf8(":/Image/voiture.png"), QSize(), QIcon::Normal, QIcon::Off);
         Voiture->setIcon(icon8);
         Voiture->setIconSize(QSize(150, 150));
-#ifndef QT_NO_SHORTCUT
+#if QT_CONFIG(shortcut)
         Voiture->setShortcut(QString::fromUtf8(""));
-#endif // QT_NO_SHORTCUT
+#endif // QT_CONFIG(shortcut)
         Voiture->setCheckable(false);
         Voiture->setAutoDefault(false);
         Voiture->setFlat(true);
@@ -351,46 +351,46 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
-        actionParametre->setText(QApplication::translate("MainWindow", "Parametre", nullptr));
-#ifndef QT_NO_TOOLTIP
-        actionParametre->setToolTip(QApplication::translate("MainWindow", "Parem\303\250tre", nullptr));
-#endif // QT_NO_TOOLTIP
-        boutonConnexion->setText(QApplication::translate("MainWindow", "se connecter", nullptr));
+        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+        actionParametre->setText(QCoreApplication::translate("MainWindow", "Parametre", nullptr));
+#if QT_CONFIG(tooltip)
+        actionParametre->setToolTip(QCoreApplication::translate("MainWindow", "Parem\303\250tre", nullptr));
+#endif // QT_CONFIG(tooltip)
+        boutonConnexion->setText(QCoreApplication::translate("MainWindow", "se connecter", nullptr));
         boutonStop->setText(QString());
-#ifndef QT_NO_SHORTCUT
-        boutonStop->setShortcut(QApplication::translate("MainWindow", "Space", nullptr));
-#endif // QT_NO_SHORTCUT
+#if QT_CONFIG(shortcut)
+        boutonStop->setShortcut(QCoreApplication::translate("MainWindow", "Space", nullptr));
+#endif // QT_CONFIG(shortcut)
         boutonGauche->setText(QString());
-#ifndef QT_NO_SHORTCUT
-        boutonGauche->setShortcut(QApplication::translate("MainWindow", "Left, Q", nullptr));
-#endif // QT_NO_SHORTCUT
+#if QT_CONFIG(shortcut)
+        boutonGauche->setShortcut(QCoreApplication::translate("MainWindow", "Left, Q", nullptr));
+#endif // QT_CONFIG(shortcut)
         boutonHaut->setText(QString());
-#ifndef QT_NO_SHORTCUT
-        boutonHaut->setShortcut(QApplication::translate("MainWindow", "Z, Up", nullptr));
-#endif // QT_NO_SHORTCUT
+#if QT_CONFIG(shortcut)
+        boutonHaut->setShortcut(QCoreApplication::translate("MainWindow", "Z, Up", nullptr));
+#endif // QT_CONFIG(shortcut)
         boutonDroite->setText(QString());
-#ifndef QT_NO_SHORTCUT
-        boutonDroite->setShortcut(QApplication::translate("MainWindow", "Right, D", nullptr));
-#endif // QT_NO_SHORTCUT
+#if QT_CONFIG(shortcut)
+        boutonDroite->setShortcut(QCoreApplication::translate("MainWindow", "Right, D", nullptr));
+#endif // QT_CONFIG(shortcut)
         boutonBas->setText(QString());
-#ifndef QT_NO_SHORTCUT
-        boutonBas->setShortcut(QApplication::translate("MainWindow", "Down, S", nullptr));
-#endif // QT_NO_SHORTCUT
+#if QT_CONFIG(shortcut)
+        boutonBas->setShortcut(QCoreApplication::translate("MainWindow", "Down, S", nullptr));
+#endif // QT_CONFIG(shortcut)
         boutonPivotG->setText(QString());
-#ifndef QT_NO_SHORTCUT
-        boutonPivotG->setShortcut(QApplication::translate("MainWindow", "A", nullptr));
-#endif // QT_NO_SHORTCUT
+#if QT_CONFIG(shortcut)
+        boutonPivotG->setShortcut(QCoreApplication::translate("MainWindow", "A", nullptr));
+#endif // QT_CONFIG(shortcut)
         boutonPivotD->setText(QString());
-#ifndef QT_NO_SHORTCUT
-        boutonPivotD->setShortcut(QApplication::translate("MainWindow", "E", nullptr));
-#endif // QT_NO_SHORTCUT
+#if QT_CONFIG(shortcut)
+        boutonPivotD->setShortcut(QCoreApplication::translate("MainWindow", "E", nullptr));
+#endif // QT_CONFIG(shortcut)
         Voiture->setText(QString());
         IndicDevantGauche->setFormat(QString());
         IndicDevantDroite->setFormat(QString());
         IndicDerriereDroite->setFormat(QString());
         IndicDerriereGauche->setFormat(QString());
-        kmParH->setHtml(QApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        kmParH->setHtml(QCoreApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'MS Sans Serif'; font-size:12pt; font-weight:400; font-style:normal;\">\n"

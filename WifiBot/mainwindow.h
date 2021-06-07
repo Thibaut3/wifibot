@@ -33,6 +33,11 @@ public slots :
 
     void on_IndicConnexion_textChanged();
 
+private slots:
+    void on_boutonPivotG_clicked();
+
+    void on_boutonPivotD_clicked();
+
 private:
     Ui::MainWindow *ui;
     MyRobot myrobot;

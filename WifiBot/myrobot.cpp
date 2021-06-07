@@ -128,6 +128,38 @@ void MyRobot::Droite(short speed1, short speed2){
     DataToSend[1] = 0x07;
     DataToSend[2] = (unsigned char) speed1;
     DataToSend[3] = (unsigned char)(speed1 >> 8);
+    DataToSend[4] = (unsigned char) speed2-20;
+    DataToSend[5] = (unsigned char)(speed2-20 >> 8);
+    DataToSend[6] = (unsigned char)(80+1);
+    short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
+    DataToSend[7] = (unsigned char) mycrcsend;
+    DataToSend[8] = (unsigned char) (mycrcsend >> 8);
+
+    connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot()));
+}
+
+void MyRobot::Gauche(short speed1, short speed2){
+    DataToSend.resize(9);
+    DataToSend[0] = 0xFF;
+    DataToSend[1] = 0x07;
+    DataToSend[2] = (unsigned char) speed1-20;
+    DataToSend[3] = (unsigned char)(speed1-20 >> 8);
+    DataToSend[4] = (unsigned char) speed2;
+    DataToSend[5] = (unsigned char)(speed2 >> 8);
+    DataToSend[6] = (unsigned char)(80+1);
+    short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
+    DataToSend[7] = (unsigned char) mycrcsend;
+    DataToSend[8] = (unsigned char) (mycrcsend >> 8);
+
+    connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot()));
+}
+
+void MyRobot::PivoterD(short speed1, short speed2){
+    DataToSend.resize(9);
+    DataToSend[0] = 0xFF;
+    DataToSend[1] = 0x07;
+    DataToSend[2] = (unsigned char) speed1;
+    DataToSend[3] = (unsigned char)(speed1 >> 8);
     DataToSend[4] = (unsigned char) speed2;
     DataToSend[5] = (unsigned char)(speed2 >> 8);
     DataToSend[6] = (unsigned char)(64+1);
@@ -138,7 +170,7 @@ void MyRobot::Droite(short speed1, short speed2){
     connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot()));
 }
 
-void MyRobot::Gauche(short speed1, short speed2){
+void MyRobot::PivoterG(short speed1, short speed2){
     DataToSend.resize(9);
     DataToSend[0] = 0xFF;
     DataToSend[1] = 0x07;
@@ -153,7 +185,6 @@ void MyRobot::Gauche(short speed1, short speed2){
 
     connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot()));
 }
-
 void MyRobot::Stop(){
     DataToSend.resize(9);
     DataToSend[0] = 0xFF;
