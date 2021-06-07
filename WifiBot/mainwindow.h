@@ -16,6 +16,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void actu();
 public slots :
     void on_boutonGauche_clicked();
 
@@ -38,9 +39,11 @@ private slots:
 
     void on_boutonPivotD_clicked();
 
+    void on_vitesseSlider_sliderMoved(int position);
+
 private:
     Ui::MainWindow *ui;
-    MyRobot myrobot;
+    MyRobot myrobot; //*
 };
 
 #endif // MAINWINDOW_H

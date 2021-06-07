@@ -58,7 +58,8 @@ void MyRobot::readyRead() {
     qDebug() << "reading..."; // read the data from the socket
     DataReceived = socket->readAll();
     emit updateUI(DataReceived);
-    qDebug() << DataReceived[0] << DataReceived[1] << DataReceived[2];
+    qDebug() << (unsigned char)DataReceived[0] << (unsigned char)DataReceived[1] << (unsigned char)DataReceived[2];
+    qDebug() << getBatteryLevel() << '%';
 }
 
 void MyRobot::MyTimerSlot() {
@@ -128,8 +129,8 @@ void MyRobot::Droite(short speed1, short speed2){
     DataToSend[1] = 0x07;
     DataToSend[2] = (unsigned char) speed1;
     DataToSend[3] = (unsigned char)(speed1 >> 8);
-    DataToSend[4] = (unsigned char) speed2-20;
-    DataToSend[5] = (unsigned char)(speed2-20 >> 8);
+    DataToSend[4] = (unsigned char) speed2-30;
+    DataToSend[5] = (unsigned char)(speed2-30 >> 8);
     DataToSend[6] = (unsigned char)(80+1);
     short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
     DataToSend[7] = (unsigned char) mycrcsend;
@@ -142,8 +143,8 @@ void MyRobot::Gauche(short speed1, short speed2){
     DataToSend.resize(9);
     DataToSend[0] = 0xFF;
     DataToSend[1] = 0x07;
-    DataToSend[2] = (unsigned char) speed1-20;
-    DataToSend[3] = (unsigned char)(speed1-20 >> 8);
+    DataToSend[2] = (unsigned char) speed1-30;
+    DataToSend[3] = (unsigned char)(speed1-30 >> 8);
     DataToSend[4] = (unsigned char) speed2;
     DataToSend[5] = (unsigned char)(speed2 >> 8);
     DataToSend[6] = (unsigned char)(80+1);
@@ -198,4 +199,23 @@ void MyRobot::Stop(){
     DataToSend[8] = 0x00;
 
     connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot()));
+}
+
+int MyRobot::getSpeed(){
+    unsigned char speed ='0';
+
+    if((int)(unsigned char)DataReceived[0] > (int)(unsigned char)DataReceived[9]){
+        speed = (unsigned char)DataReceived[9];
+    }else if((int)(unsigned char)DataReceived[0] < (int)(unsigned char)DataReceived[9]){
+        speed = (unsigned char)DataReceived[0];
+    }else{
+        speed = (unsigned char)DataReceived[0];
+    }
+    return speed;
+}
+
+int MyRobot::getBatteryLevel(){
+    int batLvl = (unsigned char)DataReceived[2];
+
+    return batLvl;
 }

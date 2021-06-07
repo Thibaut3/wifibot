@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->boutonDroite->setEnabled(false);
     ui->boutonStop->setEnabled(false);
 
+
+
 }
 
 MainWindow::~MainWindow()
@@ -22,22 +24,22 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_boutonGauche_clicked()
 {
-    myrobot.Gauche(ui->vitesse->value(),ui->vitesse->value());
+    myrobot.Gauche(ui->Vitesse->value(),ui->Vitesse->value());
 }
 
 void MainWindow::on_boutonBas_clicked()
 {
-    myrobot.Arriere(ui->vitesse->value(),ui->vitesse->value());
+    myrobot.Arriere(ui->Vitesse->value(),ui->Vitesse->value());
 }
 
 void MainWindow::on_boutonDroite_clicked()
 {
-    myrobot.Droite(ui->vitesse->value(),ui->vitesse->value());
+    myrobot.Droite(ui->Vitesse->value(),ui->Vitesse->value());
 }
 
 void MainWindow::on_boutonHaut_clicked()
 {
-    myrobot.Avant(ui->vitesse->value(),ui->vitesse->value());
+    myrobot.Avant(ui->Vitesse->value(),ui->Vitesse->value());
 }
 
 void MainWindow::on_boutonStop_clicked()
@@ -47,12 +49,12 @@ void MainWindow::on_boutonStop_clicked()
 
 void MainWindow::on_boutonPivotG_clicked()
 {
-    myrobot.PivoterG(ui->vitesse->value(),ui->vitesse->value());
+    myrobot.PivoterG(ui->Vitesse->value(),ui->Vitesse->value());
 }
 
 void MainWindow::on_boutonPivotD_clicked()
 {
-    myrobot.PivoterD(ui->vitesse->value(),ui->vitesse->value());
+    myrobot.PivoterD(ui->Vitesse->value(),ui->Vitesse->value());
 }
 
 
@@ -60,11 +62,13 @@ void MainWindow::on_boutonPivotD_clicked()
 void MainWindow::on_boutonConnexion_clicked()
 {
     myrobot.doConnect();
-    ui->boutonBas->setEnabled(true);
+    this->ui->boutonBas->setEnabled(true);
     ui->boutonHaut->setEnabled(true);
     ui->boutonGauche->setEnabled(true);
     ui->boutonDroite->setEnabled(true);
     ui->boutonStop->setEnabled(true);
+    //QObject::connect(myrobot,SIGNAL(updateUi(QByteArray)),this,SLOT(actu()));
+    ui->progressBar->setValue(myrobot.getBatteryLevel());
 
 }
 
@@ -74,6 +78,14 @@ void MainWindow::on_IndicConnexion_textChanged()
 
 }
 
+void MainWindow::actu(){
+    this->ui->progressBar->setValue(myrobot.getBatteryLevel());
+}
 
 
+
+void MainWindow::on_vitesseSlider_sliderMoved(int position)
+{
+    this->ui->Vitesse->display(position);
+}
 

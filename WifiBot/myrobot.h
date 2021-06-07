@@ -34,6 +34,9 @@ public slots:
     void PivoterD(short speed1, short speed2);
     void Stop();
     short Crc16(unsigned char *_Adresse_tab, unsigned char Taille_Max);
+
+    int getSpeed();
+    int getBatteryLevel();
 private:
     QTcpSocket *socket;
     QTimer *TimerEnvoi;
