@@ -9,8 +9,6 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QT += network
-QT += webengine
-QT += webenginewidgets
 
 TARGET = WifiBot
 TEMPLATE = app
@@ -29,15 +27,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        connexion.cpp \
         main.cpp \
         mainwindow.cpp \
         myrobot.cpp
 
 HEADERS += \
+        connexion.h \
         mainwindow.h \
         myrobot.h
 
 FORMS += \
+        connexion.ui \
         mainwindow.ui \
         mainwindow.ui
 

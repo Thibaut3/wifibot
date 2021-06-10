@@ -9,5 +9,6 @@
         <file>Image/voiture.png</file>
         <file>Image/PivotDroite.png</file>
         <file>Image/PivotGauche.png</file>
+        <file>Image/unnamed.jpg</file>
     </qresource>
 </RCC>

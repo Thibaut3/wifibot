@@ -20,7 +20,7 @@ MyRobot::MyRobot(QObject *parent) : QObject(parent) {
 }
 
 
-void MyRobot::doConnect() {
+void MyRobot::doConnect(QString IP) {
     socket = new QTcpSocket(this); // socket creation
     connect(socket, SIGNAL(connected()),this, SLOT(connected()));
     connect(socket, SIGNAL(disconnected()),this, SLOT(disconnected()));
@@ -28,7 +28,7 @@ void MyRobot::doConnect() {
     connect(socket, SIGNAL(readyRead()),this, SLOT(readyRead()));
     qDebug() << "connecting..."; // this is not blocking call
     //socket->connectToHost("LOCALHOST", 15020);
-    socket->connectToHost("192.168.1.11", 15020); // connection to wifibot
+    socket->connectToHost(IP, 15020); // connection to wifibot
     // we need to wait...
     if(!socket->waitForConnected(5000)) {
         qDebug() << "Error: " << socket->errorString();
@@ -58,7 +58,8 @@ void MyRobot::readyRead() {
     qDebug() << "reading..."; // read the data from the socket
     DataReceived = socket->readAll();
     emit updateUI(DataReceived);
-    qDebug() << DataReceived[0] << DataReceived[1] << DataReceived[2];
+    qDebug() << (unsigned char)DataReceived[0] << (unsigned char)DataReceived[1] << (unsigned char)DataReceived[2];
+    qDebug() << getSpeed() ;
 }
 
 void MyRobot::MyTimerSlot() {
@@ -128,8 +129,8 @@ void MyRobot::Droite(short speed1, short speed2){
     DataToSend[1] = 0x07;
     DataToSend[2] = (unsigned char) speed1;
     DataToSend[3] = (unsigned char)(speed1 >> 8);
-    DataToSend[4] = (unsigned char) speed2-20;
-    DataToSend[5] = (unsigned char)(speed2-20 >> 8);
+    DataToSend[4] = (unsigned char) speed2-30;
+    DataToSend[5] = (unsigned char)(speed2-30 >> 8);
     DataToSend[6] = (unsigned char)(80+1);
     short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
     DataToSend[7] = (unsigned char) mycrcsend;
@@ -142,8 +143,8 @@ void MyRobot::Gauche(short speed1, short speed2){
     DataToSend.resize(9);
     DataToSend[0] = 0xFF;
     DataToSend[1] = 0x07;
-    DataToSend[2] = (unsigned char) speed1-20;
-    DataToSend[3] = (unsigned char)(speed1-20 >> 8);
+    DataToSend[2] = (unsigned char) speed1-30;
+    DataToSend[3] = (unsigned char)(speed1-30 >> 8);
     DataToSend[4] = (unsigned char) speed2;
     DataToSend[5] = (unsigned char)(speed2 >> 8);
     DataToSend[6] = (unsigned char)(80+1);
@@ -199,3 +200,58 @@ void MyRobot::Stop(){
 
     connect(TimerEnvoi, SIGNAL(timeout()), this, SLOT(MyTimerSlot()));
 }
+
+int MyRobot::getSpeed(){
+    unsigned char speed ='0';
+
+    if((int)(unsigned char)DataReceived[0] > (int)(unsigned char)DataReceived[9]){
+        speed = (unsigned char)DataReceived[9];
+    }else if((int)(unsigned char)DataReceived[0] < (int)(unsigned char)DataReceived[9]){
+        speed = (unsigned char)DataReceived[0];
+    }else{
+        speed = (unsigned char)DataReceived[0];
+    }
+    return speed;
+}
+
+int MyRobot::getBatteryLevel(){
+    int batLvl = (unsigned char)DataReceived[2];
+
+    return batLvl;
+}
+
+QVector<int> MyRobot::getIR(){
+    QVector<int> IR;
+    IR.push_back((unsigned char)DataReceived[3]);
+    IR.push_back((unsigned char)DataReceived[11]);
+    IR.push_back((unsigned char)DataReceived[4]);
+    IR.push_back((unsigned char)DataReceived[12]);
+    return  IR;
+}
+
+QVector<int> MyRobot::getOdo(){
+    QVector<int> Odo;
+    Odo.push_back((unsigned char)(((((long)DataReceived[8] << 24)) + (((long)DataReceived[7] << 16)) + (((long)DataReceived[6] << 8)) + ((long)DataReceived[5]))));
+    Odo.push_back((unsigned char)(((((long)DataReceived[16] << 24)) + (((long)DataReceived[15] << 16)) + (((long)DataReceived[14] << 8)) + ((long)DataReceived[13]))));
+    return Odo;
+}
+
+QString MyRobot::getMSG(){
+    QString msg = socket->errorString();
+
+    if(msg=="Unknown error"){
+        msg = "Vous êtes connecté au WifiBot";
+    }
+    if(msg=="Connection refused"){
+        msg = "Connexion refusée";
+    }
+    if(msg=="Host not found"){
+        msg = "Hôte introuvable (Mauvaise IP)";
+    }
+    if(msg=="Socket operation timed out"){
+        msg = "L'hôte ne répond pas";
+    }
+
+    return msg;
+}
+
