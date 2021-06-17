@@ -16,7 +16,8 @@ public:
     ~connexion();
 
     QString getIP(); //Retourne l'adresse IP
-    QString getPort(); //Retourne le port
+    QString getPort(); //Retourne le port du robot
+    QString getCam(); //Retourne le port de la caméra
 
 signals:
     void newData();
@@ -33,6 +34,7 @@ private:
     Ui::connexion *ui;
     QString IP;
     QString port;
+    QString portCam;
 };
 
 #endif // CONNEXION_H

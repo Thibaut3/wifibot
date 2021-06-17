@@ -17,6 +17,7 @@ void connexion::on_buttonBox_accepted()
 {
     IP = ui->IPAdresse->toPlainText(); //Recupérer l'adresse IP saisie
     port = ui->PortRobot->toPlainText(); //Récupérer le port saisie
+    portCam = ui->PortCam->toPlainText(); //Récupérer le port de la caméra saisie
     emit newData(); //émet un signal
 }
 
@@ -32,5 +33,9 @@ void connexion::on_btnDeco_clicked()
 {
     emit deco(); //émet un signal
     this->close(); //ferme la fenêtre
+}
+
+QString connexion::getCam(){
+    return this->portCam; // Retourne le port de la caméra saisie
 }
 

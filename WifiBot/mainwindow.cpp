@@ -105,6 +105,8 @@ void MainWindow::on_actionParametre_triggered()
 void MainWindow::connected(){
     myrobot.doConnect(nw->getIP(),nw->getPort()); //Se connecte au robot grâce à l'adresse IP et au port saisie dans la fenêtre de connexion
 
+    //nw->getCam();
+
     if(myrobot.getMSG()=="Vous êtes connecté au WifiBot"){  // Si on est connecté
 
         //Débloque les boutons de commandes
