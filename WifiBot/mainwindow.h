@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "myrobot.h"
 #include "connexion.h"
+#include "QtMath"
 
 namespace Ui {
 class MainWindow;
@@ -18,29 +19,26 @@ public:
     ~MainWindow();
 
 public slots :
-    void on_boutonGauche_clicked();
+    //Slots pour commander le Robot
+    void on_boutonGauche_clicked(); //GAUCHE
+    void on_boutonDroite_clicked(); //DROITE
 
-    void on_boutonBas_clicked();
+    void on_boutonBas_clicked(); //AVANT
+    void on_boutonHaut_clicked(); //ARRIERE
 
-    void on_boutonDroite_clicked();
+    void on_boutonStop_clicked(); //STOP
 
-
-    void on_boutonHaut_clicked();
-
-    void on_boutonStop_clicked();
+    void on_boutonPivotG_clicked(); //PIVOT GAUCHE
+    void on_boutonPivotD_clicked(); //PIVOT DROIT
 
     //Slot pour afficher la batterie
     void batLvl();
     //Slot pour afficher la vitesse
     void vitRobot();
-    //Slots pour afficher les capteurs IR
-    void IRFR(); //DEVANT DROIT
-    void IRFL(); //DEVANT GAUCHE
-    void IRBR(); //DERRIERE DROIT
-    void IRBL(); //DERRIERE GAUCHE
-
-    void OdoG();
-    void OdoD();
+    //Slot pour afficher les capteurs IR
+    void IRdata();
+    //Slot pour afficher l'Odométrie
+    void Odo();
 
     //Slot pour afficher le message de connexion
     void MSGConnexion();
@@ -48,10 +46,10 @@ public slots :
     //Slot pour se connecter grâce à l'autre fenêtre
     void connected();
 
-private slots:
-    void on_boutonPivotG_clicked();
+    //Slot pour se deconnecter depuis l'autre fenêtre
+    void deconnected();
 
-    void on_boutonPivotD_clicked();
+private slots:
 
     void on_vitesse_sliderMoved(int position);
 
@@ -60,7 +58,11 @@ private slots:
 private:
     Ui::MainWindow *ui;
     MyRobot myrobot;
-    connexion *nw = new connexion();
+
+    connexion *nw = new connexion(); //Fenêtre de connexion
+
+    double odoG; //Valeur odométrique Gauche précédente
+    double odoD; //Valeur odométrique Droit précédente
 };
 
 #endif // MAINWINDOW_H

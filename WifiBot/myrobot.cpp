@@ -20,7 +20,7 @@ MyRobot::MyRobot(QObject *parent) : QObject(parent) {
 }
 
 
-void MyRobot::doConnect(QString IP) {
+void MyRobot::doConnect(QString IP, QString port) {
     socket = new QTcpSocket(this); // socket creation
     connect(socket, SIGNAL(connected()),this, SLOT(connected()));
     connect(socket, SIGNAL(disconnected()),this, SLOT(disconnected()));
@@ -28,7 +28,7 @@ void MyRobot::doConnect(QString IP) {
     connect(socket, SIGNAL(readyRead()),this, SLOT(readyRead()));
     qDebug() << "connecting..."; // this is not blocking call
     //socket->connectToHost("LOCALHOST", 15020);
-    socket->connectToHost(IP, 15020); // connection to wifibot
+    socket->connectToHost(IP, port.toShort()); // connection to wifibot
     // we need to wait...
     if(!socket->waitForConnected(5000)) {
         qDebug() << "Error: " << socket->errorString();
@@ -59,7 +59,7 @@ void MyRobot::readyRead() {
     DataReceived = socket->readAll();
     emit updateUI(DataReceived);
     qDebug() << (unsigned char)DataReceived[0] << (unsigned char)DataReceived[1] << (unsigned char)DataReceived[2];
-    qDebug() << getSpeed() ;
+    qDebug() << "SPEED : " << getSpeed() ;
 }
 
 void MyRobot::MyTimerSlot() {
@@ -99,7 +99,7 @@ void MyRobot::Avant(short speed1, short speed2){
     DataToSend[3] = (unsigned char)(speed1 >> 8);
     DataToSend[4] = (unsigned char) speed2;
     DataToSend[5] = (unsigned char)(speed2 >> 8);
-    DataToSend[6] = (unsigned char)(80+1);
+    DataToSend[6] = (unsigned char)(80+1); //80 pour tourner les roues en avant, +1 pour activer les capteurs
     short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
     DataToSend[7] = (unsigned char) mycrcsend;
     DataToSend[8] = (unsigned char) (mycrcsend >> 8);
@@ -115,7 +115,7 @@ void MyRobot::Arriere(short speed1, short speed2){
     DataToSend[3] = (unsigned char)(speed1 >> 8);
     DataToSend[4] = (unsigned char) speed2;
     DataToSend[5] = (unsigned char)(speed2 >> 8);
-    DataToSend[6] = (unsigned char)(0+1);
+    DataToSend[6] = (unsigned char)(0+1); //0 pour tourner les roues en arrière, +1 pour activer les capteurs
     short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
     DataToSend[7] = (unsigned char) mycrcsend;
     DataToSend[8] = (unsigned char) (mycrcsend >> 8);
@@ -131,7 +131,7 @@ void MyRobot::Droite(short speed1, short speed2){
     DataToSend[3] = (unsigned char)(speed1 >> 8);
     DataToSend[4] = (unsigned char) speed2-30;
     DataToSend[5] = (unsigned char)(speed2-30 >> 8);
-    DataToSend[6] = (unsigned char)(80+1);
+    DataToSend[6] = (unsigned char)(80+1); //80 pour tourner les roues en avant, +1 pour activer les capteurs
     short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
     DataToSend[7] = (unsigned char) mycrcsend;
     DataToSend[8] = (unsigned char) (mycrcsend >> 8);
@@ -147,7 +147,7 @@ void MyRobot::Gauche(short speed1, short speed2){
     DataToSend[3] = (unsigned char)(speed1-30 >> 8);
     DataToSend[4] = (unsigned char) speed2;
     DataToSend[5] = (unsigned char)(speed2 >> 8);
-    DataToSend[6] = (unsigned char)(80+1);
+    DataToSend[6] = (unsigned char)(80+1); //80 pour tourner les roues en avant, +1 pour activer les capteurs
     short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
     DataToSend[7] = (unsigned char) mycrcsend;
     DataToSend[8] = (unsigned char) (mycrcsend >> 8);
@@ -163,7 +163,7 @@ void MyRobot::PivoterD(short speed1, short speed2){
     DataToSend[3] = (unsigned char)(speed1 >> 8);
     DataToSend[4] = (unsigned char) speed2;
     DataToSend[5] = (unsigned char)(speed2 >> 8);
-    DataToSend[6] = (unsigned char)(64+1);
+    DataToSend[6] = (unsigned char)(64+1); //64 pour tourner les roues droite en avant, +1 pour activer les capteurs
     short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
     DataToSend[7] = (unsigned char) mycrcsend;
     DataToSend[8] = (unsigned char) (mycrcsend >> 8);
@@ -179,7 +179,7 @@ void MyRobot::PivoterG(short speed1, short speed2){
     DataToSend[3] = (unsigned char)(speed1 >> 8);
     DataToSend[4] = (unsigned char) speed2;
     DataToSend[5] = (unsigned char)(speed2 >> 8);
-    DataToSend[6] = (unsigned char)(16+1);
+    DataToSend[6] = (unsigned char)(16+1); //616 pour tourner les roues gauche en avant, +1 pour activer les capteurs
     short mycrcsend = Crc16((unsigned char *)DataToSend.data()+1,6);
     DataToSend[7] = (unsigned char) mycrcsend;
     DataToSend[8] = (unsigned char) (mycrcsend >> 8);
@@ -204,6 +204,7 @@ void MyRobot::Stop(){
 int MyRobot::getSpeed(){
     unsigned char speed ='0';
 
+    //Récupère la vitesse et retourne la plus petite des deux
     if((int)(unsigned char)DataReceived[0] > (int)(unsigned char)DataReceived[9]){
         speed = (unsigned char)DataReceived[9];
     }else if((int)(unsigned char)DataReceived[0] < (int)(unsigned char)DataReceived[9]){
@@ -215,13 +216,14 @@ int MyRobot::getSpeed(){
 }
 
 int MyRobot::getBatteryLevel(){
+    //Récupère la valeur de la batterie
     int batLvl = (unsigned char)DataReceived[2];
-
     return batLvl;
 }
 
 QVector<int> MyRobot::getIR(){
     QVector<int> IR;
+    //Récupère les données d'IR et les push dans le vecteur
     IR.push_back((unsigned char)DataReceived[3]);
     IR.push_back((unsigned char)DataReceived[11]);
     IR.push_back((unsigned char)DataReceived[4]);
@@ -229,15 +231,16 @@ QVector<int> MyRobot::getIR(){
     return  IR;
 }
 
-QVector<int> MyRobot::getOdo(){
-    QVector<int> Odo;
-    Odo.push_back((unsigned char)(((((long)DataReceived[8] << 24)) + (((long)DataReceived[7] << 16)) + (((long)DataReceived[6] << 8)) + ((long)DataReceived[5]))));
-    Odo.push_back((unsigned char)(((((long)DataReceived[16] << 24)) + (((long)DataReceived[15] << 16)) + (((long)DataReceived[14] << 8)) + ((long)DataReceived[13]))));
+QVector<double> MyRobot::getOdo(){
+    QVector<double> Odo;
+    //Récupérer les données odométriques en les décallants a chaque fois (24 puis 16, 8 et 5) et les push dans le vecteur
+    Odo.push_back((double)(((((long)DataReceived[8] << 24)) + (((long)DataReceived[7] << 16)) + (((long)DataReceived[6] << 8)) + ((long)DataReceived[5])))/2248);
+    Odo.push_back((double)(((((long)DataReceived[16] << 24)) + (((long)DataReceived[15] << 16)) + (((long)DataReceived[14] << 8)) + ((long)DataReceived[13])))/2248);
     return Odo;
 }
 
 QString MyRobot::getMSG(){
-    QString msg = socket->errorString();
+    QString msg = socket->errorString(); //Récupère le message d'érreur
 
     if(msg=="Unknown error"){
         msg = "Vous êtes connecté au WifiBot";

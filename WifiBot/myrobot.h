@@ -12,7 +12,7 @@ class MyRobot : public QObject {
     Q_OBJECT
 public:
     explicit MyRobot(QObject *parent = 0);
-    void doConnect(QString IP);
+    void doConnect(QString IP,QString port);
     void disConnect();
     QByteArray DataToSend;
     QByteArray DataReceived;
@@ -42,7 +42,7 @@ public slots:
     int getSpeed();
     int getBatteryLevel();
     QVector<int> getIR();
-    QVector<int> getOdo();
+    QVector<double> getOdo();
 
     //RECUPERER LE MESSAGE DE CONNEXION
     QString getMSG();

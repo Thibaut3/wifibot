@@ -15,18 +15,24 @@ public:
     explicit connexion(QWidget *parent = nullptr);
     ~connexion();
 
-    QString getIP();
+    QString getIP(); //Retourne l'adresse IP
+    QString getPort(); //Retourne le port
 
 signals:
-    void newIP();
+    void newData();
+    void deco();
 
 public slots:
     //On appuie sur OK
     void on_buttonBox_accepted();
 
+    //On appuie sur SE DECONNECTER
+    void on_btnDeco_clicked();
+
 private:
     Ui::connexion *ui;
     QString IP;
+    QString port;
 };
 
 #endif // CONNEXION_H
